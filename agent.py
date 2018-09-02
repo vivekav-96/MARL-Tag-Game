@@ -23,12 +23,12 @@ class Agent(ABC):
         y = random.randint(-10, 10)
         for i in range(period):
             coords = self.parent.coords(self.card)
-            print(coords)
+            # print(coords, x, y, self.parent.winfo_width(), self.parent.winfo_height())
             if i % 10 == 0:
                 x = random.randint(-10, 10)
                 y = random.randint(-10, 10)
-            x = x if coords[0] + x > 15 else 0
-            y = y if coords[1] + y > 15 else 0
+            x = x if 15 < coords[0] + x < self.parent.winfo_width() - 15 else 0
+            y = y if 15 < coords[1] + y < self.parent.winfo_height() - 15 else 0
             self.move(x, y)
             time.sleep(0.05)
 
