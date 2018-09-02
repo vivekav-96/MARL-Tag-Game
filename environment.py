@@ -10,15 +10,18 @@ root.geometry("%dx%d+0+0" % (w/2, h/2))
 canvas = tk.Canvas(root, bg="black", highlightthickness=0)
 canvas.pack(fill="both", expand=True)
 
-a1 = Runner(canvas, 200, 200)
-a1.gogogo()
-a2 = Runner(canvas, 200, 200)
-a2.gogogo()
-
-b1 = Chaser(canvas, 500, 300)
+a1 = Chaser(canvas, 0, 0)
+b1 = Runner(canvas, 450, 250)
 b1.gogogo()
-b2 = Chaser(canvas, 500, 300)
-b2.gogogo()
+a1.chase(b1)
+# a1.gogogo()
+# a2 = Runner(canvas, 200, 200)
+# a2.gogogo()
+#
+
+# b1.gogogo()
+# b2 = Chaser(canvas, 500, 300)
+# b2.gogogo()
 
 root.mainloop()
 
