@@ -9,7 +9,7 @@ class Runner(Agent):
         self.evade(env.get_chaser())
 
     def get_icon(self):
-        return 'red.png'
+        return 'icons/red.png'
 
     def evade(self, chaser):
         target_coords = chaser.get_self_coords()
@@ -18,3 +18,6 @@ class Runner(Agent):
         # print('distance to kill : {}'.format(distance_btw_points(target_coords, self.get_self_coords())))
         self.move(-2 * math.cos(theta), -2 * math.sin(theta))
         return distance_btw_points(target_coords, self.get_self_coords())
+
+    def unit_distance(self):
+        return 4

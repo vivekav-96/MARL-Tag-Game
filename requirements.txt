@@ -1,3 +1,5 @@
+Pillow
+pyscreenshot
 tensorflow
 keras
 gym

@@ -4,6 +4,18 @@ import threading
 import time
 import tkinter as tk
 from abc import ABC, abstractmethod
+from enum import Enum
+
+
+class Actions(Enum):
+    NORTH = 0
+    NORTH_EAST = 1
+    EAST = 2
+    SOUTH_EAST = 3
+    SOUTH = 4
+    SOUTH_WEST = 5
+    WEST = 6
+    NORTH_WEST = 7
 
 
 class Agent(ABC):
@@ -30,6 +42,29 @@ class Agent(ABC):
             self.move(x, y)
             time.sleep(0.05)
             i += 1
+
+    def take_action(self, action):
+        """
+        :param action: action
+
+        Moves agent unit distance to the passed direction
+        """
+        if action == Actions.NORTH:
+            self.move(0, -self.unit_distance())
+        elif action == Actions.EAST:
+            self.move(self.unit_distance(), 0)
+        elif action == Actions.SOUTH:
+            self.move(0, self.unit_distance())
+        elif action == Actions.WEST:
+            self.move(-self.unit_distance(), 0)
+        elif action == Actions.NORTH_EAST:
+            self.move(self.unit_distance(), -self.unit_distance())
+        elif action == Actions.NORTH_WEST:
+            self.move(-self.unit_distance(), -self.unit_distance())
+        elif action == Actions.SOUTH_EAST:
+            self.move(self.unit_distance(), self.unit_distance())
+        elif action == Actions.SOUTH_WEST:
+            self.move(-self.unit_distance(), self.unit_distance())
 
     def move(self, x, y):
         """
@@ -76,4 +111,8 @@ class Agent(ABC):
 
     @abstractmethod
     def step(self, env):
+        pass
+
+    @abstractmethod
+    def unit_distance(self):
         pass

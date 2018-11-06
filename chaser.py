@@ -20,5 +20,8 @@ class Chaser(Agent):
         self.move(2 * math.cos(theta), 2 * math.sin(theta))
         return distance_btw_points(target_coords, self.get_self_coords())
 
+    def unit_distance(self):
+        return 3
+
     def get_icon(self):
-        return 'blue.png'
+        return 'icons/blue.png'
