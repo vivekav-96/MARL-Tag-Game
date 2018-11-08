@@ -49,6 +49,9 @@ if __name__ == '__main__':
 
         env.render()
         observed_frame = env.observe()
-        for a in agents:
-            a.step(observed_frame)
+        for agent in agents:
+            agent.step(observed_frame)
+            reward = env.get_reward_for_agent(agent)
+            agent.learn(reward)
+
         print('Done episode #{0}'.format(i))

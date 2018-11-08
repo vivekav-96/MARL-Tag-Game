@@ -3,6 +3,8 @@ import tkinter as tk
 import gym
 import pyscreenshot as ImageGrab
 
+from agent import Type
+
 
 class TagEnv(gym.Env):
 
@@ -30,6 +32,17 @@ class TagEnv(gym.Env):
         """
         im = ImageGrab.grab(bbox=self.box)
         return im
+
+    def get_reward_for_agent(self, agent):
+        """
+        :param agent: Agent whose reward has to be calculated
+        :return:  Reward of the agent
+        """
+        if agent.get_agent_type() == Type.RUNNER:
+            # Calculate Runner Reward
+            pass
+        else:
+            pass
 
     def update_ui(self):
         self.root.update_idletasks()

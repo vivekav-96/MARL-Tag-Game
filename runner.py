@@ -1,6 +1,6 @@
 import math
 
-from agent import Agent
+from agent import Agent, Type
 from utils import distance_btw_points
 
 
@@ -21,3 +21,9 @@ class Runner(Agent):
 
     def unit_distance(self):
         return 4
+
+    def get_agent_type(self):
+        return Type.RUNNER
+
+    def learn(self, reward):
+        pass

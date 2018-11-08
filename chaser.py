@@ -1,6 +1,6 @@
 import math
 
-from agent import Agent
+from agent import Agent, Type
 from utils import distance_btw_points
 
 
@@ -25,3 +25,9 @@ class Chaser(Agent):
 
     def get_icon(self):
         return 'icons/blue.png'
+
+    def get_agent_type(self):
+        return Type.CHASER
+
+    def learn(self, reward):
+        pass

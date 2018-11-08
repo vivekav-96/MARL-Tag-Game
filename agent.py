@@ -7,6 +7,11 @@ from abc import ABC, abstractmethod
 from enum import Enum
 
 
+class Type(Enum):
+    RUNNER = 0
+    CHASER = 1
+
+
 class Actions(Enum):
     NORTH = 0
     NORTH_EAST = 1
@@ -20,6 +25,15 @@ class Actions(Enum):
 
 class Agent(ABC):
     def __init__(self, id, environment, parent, init_x, init_y):
+        """
+        :param id: ID of the agent. An integer
+        :param environment: environment the agent is acting in
+        :param parent: parent canvas of the agent.
+        :param init_x: Initial X co-ordinate of the agent
+        :param init_y: Initial Y co-ordinate of the agent
+
+        Pass these arguments to initialise an agent.
+        """
         self.id = id
         self.img = tk.PhotoImage(file=self.get_icon())
         self.card = parent.create_image(init_x, init_y, image=self.img)
@@ -123,5 +137,22 @@ class Agent(ABC):
         :return: Unit distance
 
         That is distance travelled by agent in one step. It'll be slightly higher for runner than chasers.
+        """
+        pass
+
+    @abstractmethod
+    def get_agent_type(self):
+        """
+        :return: Type of the agent. Either RUNNER or CHASER
+        """
+        pass
+
+    @abstractmethod
+    def learn(self, reward):
+        """
+        :param reward: Reward got for the step.
+        :return: Error rate.
+
+        Update the Agent's knowledge based on the reward got.
         """
         pass
