@@ -1,4 +1,5 @@
 import gym
+import tag_environment
 
 from rl_chaser import RLChaser
 from rl_runner import RLRunner
