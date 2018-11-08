@@ -1,13 +1,11 @@
 import math
+from abc import ABC
 
 from agent import Agent, Type
 from utils import distance_btw_points
 
 
-class Chaser(Agent):
-
-    def step(self, env):
-        print('Chaser - {0} stepping...'.format(self.get_id()))
+class Chaser(Agent, ABC):
 
     def chase(self, runner):
         """

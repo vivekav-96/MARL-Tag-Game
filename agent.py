@@ -23,6 +23,16 @@ class Actions(Enum):
     NORTH_WEST = 7
 
 
+actions = [Actions.NORTH,
+           Actions.NORTH_EAST,
+           Actions.EAST,
+           Actions.SOUTH_EAST,
+           Actions.SOUTH,
+           Actions.SOUTH_WEST,
+           Actions.WEST,
+           Actions.NORTH_WEST]
+
+
 class Agent(ABC):
     def __init__(self, id, environment, parent, init_x, init_y):
         """
@@ -38,6 +48,10 @@ class Agent(ABC):
         self.img = tk.PhotoImage(file=self.get_icon())
         self.card = parent.create_image(init_x, init_y, image=self.img)
         self.parent = parent
+
+    def act(self, observed_frame):
+        action = self.step(observed_frame)
+        self.move_to_direction(actions[action])
 
     def gogogo(self):
         """
@@ -128,7 +142,11 @@ class Agent(ABC):
         pass
 
     @abstractmethod
-    def step(self, env):
+    def step(self, observed_frame):
+        """
+        :param observed_frame: passes the observed_frame
+        :return: the action to take, an integer between 0 to 7
+        """
         pass
 
     @abstractmethod

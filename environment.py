@@ -33,8 +33,8 @@ class Environment:
         return self.a1
 
     def test(self, event):
-        self.get_chaser().step(self)
-        self.get_runner().step(self)
+        self.get_chaser().__step(self)
+        self.get_runner().__step(self)
 
 
 def play(env):

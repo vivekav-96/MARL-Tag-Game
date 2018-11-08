@@ -1,12 +1,11 @@
 import math
+from abc import ABC
 
 from agent import Agent, Type
 from utils import distance_btw_points
 
 
-class Runner(Agent):
-    def step(self, env):
-        print('Runner - {0} stepping...'.format(self.get_id()))
+class Runner(Agent, ABC):
 
     def get_icon(self):
         return 'icons/red.png'
@@ -24,6 +23,3 @@ class Runner(Agent):
 
     def get_agent_type(self):
         return Type.RUNNER
-
-    def learn(self, reward):
-        pass

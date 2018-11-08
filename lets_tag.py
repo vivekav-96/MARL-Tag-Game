@@ -1,26 +1,10 @@
 import gym
 
-from agent import Actions
-from chaser import Chaser
-from runner import Runner
+from rl_chaser import RLChaser
+from rl_runner import RLRunner
 
 NUMBER_OF_RUNNERS = 1
 NUMBER_OF_CHASERS = 1
-
-actions = [Actions.NORTH,
-           Actions.NORTH_EAST,
-           Actions.EAST,
-           Actions.SOUTH_EAST,
-           Actions.SOUTH,
-           Actions.SOUTH_WEST,
-           Actions.WEST,
-           Actions.NORTH_WEST]
-
-
-def step_agents(agents):
-    for a in agents:
-        a.step()
-
 
 if __name__ == '__main__':
     env = gym.make('tag-v0')
@@ -29,11 +13,11 @@ if __name__ == '__main__':
     runners = []
 
     for i in range(NUMBER_OF_CHASERS):
-        c = Chaser(i, env, env.get_canvas(), 350, 100)
+        c = RLChaser(i, env, env.get_canvas(), 350, 100)
         chasers.append(c)
 
     for i in range(NUMBER_OF_RUNNERS):
-        r = Runner(i, env, env.get_canvas(), 500, 500)
+        r = RLRunner(i, env, env.get_canvas(), 500, 500)
         runners.append(r)
 
     agents = runners + chasers
@@ -50,7 +34,7 @@ if __name__ == '__main__':
         env.render()
         observed_frame = env.observe()
         for agent in agents:
-            agent.step(observed_frame)
+            agent.act(observed_frame)
             reward = env.get_reward_for_agent(agent)
             agent.learn(reward)
 
