@@ -12,11 +12,8 @@ class TagEnv(gym.Env):
 
         self.canvas = tk.Canvas(self.root, bg="black", highlightthickness=0)
         self.canvas.pack(fill="both", expand=True)
-
+        self.box = None
         self.update_ui()
-
-        self.box = (self.canvas.winfo_rootx(), self.canvas.winfo_rooty(),
-                    self.canvas.winfo_width(), self.canvas.winfo_height())
 
     def step(self, action):
         pass
@@ -37,6 +34,8 @@ class TagEnv(gym.Env):
     def update_ui(self):
         self.root.update_idletasks()
         self.root.update()
+        self.box = (self.canvas.winfo_rootx(), self.canvas.winfo_rooty(),
+                    self.canvas.winfo_width(), self.canvas.winfo_height())
 
     def get_canvas(self):
         return self.canvas

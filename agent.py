@@ -19,7 +19,8 @@ class Actions(Enum):
 
 
 class Agent(ABC):
-    def __init__(self, parent, init_x, init_y):
+    def __init__(self, id, environment, parent, init_x, init_y):
+        self.id = id
         self.img = tk.PhotoImage(file=self.get_icon())
         self.card = parent.create_image(init_x, init_y, image=self.img)
         self.parent = parent
@@ -43,27 +44,27 @@ class Agent(ABC):
             time.sleep(0.05)
             i += 1
 
-    def take_action(self, action):
+    def move_to_direction(self, direction):
         """
-        :param action: action
+        :param direction: direction
 
         Moves agent unit distance to the passed direction
         """
-        if action == Actions.NORTH:
+        if direction == Actions.NORTH:
             self.move(0, -self.unit_distance())
-        elif action == Actions.EAST:
+        elif direction == Actions.EAST:
             self.move(self.unit_distance(), 0)
-        elif action == Actions.SOUTH:
+        elif direction == Actions.SOUTH:
             self.move(0, self.unit_distance())
-        elif action == Actions.WEST:
+        elif direction == Actions.WEST:
             self.move(-self.unit_distance(), 0)
-        elif action == Actions.NORTH_EAST:
+        elif direction == Actions.NORTH_EAST:
             self.move(self.unit_distance(), -self.unit_distance())
-        elif action == Actions.NORTH_WEST:
+        elif direction == Actions.NORTH_WEST:
             self.move(-self.unit_distance(), -self.unit_distance())
-        elif action == Actions.SOUTH_EAST:
+        elif direction == Actions.SOUTH_EAST:
             self.move(self.unit_distance(), self.unit_distance())
-        elif action == Actions.SOUTH_WEST:
+        elif direction == Actions.SOUTH_WEST:
             self.move(-self.unit_distance(), self.unit_distance())
 
     def move(self, x, y):
@@ -105,6 +106,9 @@ class Agent(ABC):
             theta = math.degrees(math.atan((coords[1] - target_y) / (coords[0] - target_x)))
             return theta
 
+    def get_id(self):
+        return self.id
+
     @abstractmethod
     def get_icon(self):
         pass
@@ -115,4 +119,9 @@ class Agent(ABC):
 
     @abstractmethod
     def unit_distance(self):
+        """
+        :return: Unit distance
+
+        That is distance travelled by agent in one step. It'll be slightly higher for runner than chasers.
+        """
         pass

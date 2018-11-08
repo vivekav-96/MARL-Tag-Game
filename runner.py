@@ -6,7 +6,7 @@ from utils import distance_btw_points
 
 class Runner(Agent):
     def step(self, env):
-        self.evade(env.get_chaser())
+        print('Runner - {0} stepping...'.format(self.get_id()))
 
     def get_icon(self):
         return 'icons/red.png'

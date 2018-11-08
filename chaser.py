@@ -7,7 +7,7 @@ from utils import distance_btw_points
 class Chaser(Agent):
 
     def step(self, env):
-        self.chase(env.get_runner())
+        print('Chaser - {0} stepping...'.format(self.get_id()))
 
     def chase(self, runner):
         """
