@@ -5,6 +5,7 @@ import time
 import tkinter as tk
 from abc import ABC, abstractmethod
 from enum import Enum
+from utils import distance_btw_points
 
 
 class Type(Enum):
@@ -52,6 +53,7 @@ class Agent(ABC):
     def act(self, observed_frame):
         action = self.step(observed_frame)
         self.move_to_direction(actions[action])
+        return action
 
     def gogogo(self):
         """
@@ -134,6 +136,15 @@ class Agent(ABC):
             theta = math.degrees(math.atan((coords[1] - target_y) / (coords[0] - target_x)))
             return theta
 
+    def is_collided(self, agent):
+        """
+        :param agent: Target agent
+        :return: boolean
+
+        Returns true if the agent has been collided  with the target agent.
+        """
+        return distance_btw_points(self.get_self_coords(), agent.get_self_coords()) <= 15
+
     def get_id(self):
         return self.id
 
@@ -166,8 +177,10 @@ class Agent(ABC):
         pass
 
     @abstractmethod
-    def learn(self, reward):
+    def learn(self, observed_frame, action, reward):
         """
+        :param observed_frame: Frame observed
+        :param action: Action taken
         :param reward: Reward got for the step.
         :return: Error rate.
 

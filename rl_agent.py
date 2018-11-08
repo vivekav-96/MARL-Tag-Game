@@ -16,6 +16,9 @@ class AbstractRLAgent(Agent, ABC):
         self.network = None
         self.load_network(force_rebuild_network=True)
 
+    def learn(self, observed_frame, action, reward):
+        print('Agent {0} got reward {1} for performing action {2}'.format(self.get_id(), reward, action))
+
     def load_network(self, force_rebuild_network=False):
         """
         :param force_rebuild_network: Force the rebuilding of the RLAgent's network

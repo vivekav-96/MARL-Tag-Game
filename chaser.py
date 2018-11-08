@@ -26,6 +26,3 @@ class Chaser(Agent, ABC):
 
     def get_agent_type(self):
         return Type.CHASER
-
-    def learn(self, reward):
-        pass
