@@ -1,9 +1,3 @@
-from PIL import Image
-from keras import Sequential
-from keras.layers import Conv2D
-from keras.layers.convolutional import MaxPooling2D
-from keras.layers.core import Dense, Flatten
-from keras.preprocessing.image import img_to_array
 from utils import distance_btw_points
 
 if __name__ == '__main__':

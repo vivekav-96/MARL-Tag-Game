@@ -46,14 +46,20 @@ class Agent(ABC):
         Pass these arguments to initialise an agent.
         """
         self.id = id
+        self.environment = environment
         self.img = tk.PhotoImage(file=self.get_icon())
         self.card = parent.create_image(init_x, init_y, image=self.img)
         self.parent = parent
 
-    def act(self, observed_frame):
-        action = self.step(observed_frame)
+    def step(self, observed_frame):
+        """
+        :param observed_frame: pass the observed_frame
+        :return: (preprocessed_observed_frame, action_took, reward_got)
+        """
+        preprocessed_frame, action = self.act(observed_frame)
         self.move_to_direction(actions[action])
-        return action
+        reward = self.environment.get_reward_for_agent(self)
+        return preprocessed_frame, action, reward
 
     def gogogo(self):
         """
@@ -134,10 +140,10 @@ class Agent(ABC):
         pass
 
     @abstractmethod
-    def step(self, observed_frame):
+    def act(self, observed_frame):
         """
-        :param observed_frame: passes the observed_frame
-        :return: the action to take, an integer between 0 to 7
+        :param observed_frame: pass the observed_frame
+        :return: (preprocessed_observed_frame, action_took)
         """
         pass
 

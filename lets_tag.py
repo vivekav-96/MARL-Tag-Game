@@ -1,3 +1,5 @@
+import os
+
 import gym
 import tag_environment
 
@@ -24,14 +26,18 @@ if __name__ == '__main__':
     agents = runners + chasers
     env.spawn_agents(runners, chasers)
     i = 0
-
-    while True:
+    if not os.path.exists('frames'):
+        os.mkdir('frames')
+    while i < 5:
         i += 1
         env.render()
         observed_frame = env.observe()
+        observed_frame.save('frames/observed_frame_{0}.png'.format(i))
         for agent in agents:
-            action = agent.act(observed_frame)
-            reward = env.get_reward_for_agent(agent)
-            agent.learn(observed_frame, action, reward)
+            stimulus, action, reward = agent.step(observed_frame)
+            agent.learn(stimulus, action, reward)
 
         print('Done episode #{0}'.format(i))
+
+    for a in agents:
+        a.save_network()

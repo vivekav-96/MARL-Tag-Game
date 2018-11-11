@@ -5,7 +5,6 @@ from keras import Sequential
 from keras.layers import Conv2D
 from keras.layers.convolutional import MaxPooling2D
 from keras.layers.core import Dense, Flatten
-from keras.preprocessing.image import img_to_array
 from keras.models import model_from_json
 
 from agent import Agent
@@ -77,18 +76,3 @@ class AbstractRLAgent(Agent, ABC):
         model.add(Dense(8))
         model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
         return model
-
-    @staticmethod
-    def preprocess_image(observed_frame):
-        """
-        :param observed_frame: pass the observed_frame, a Pillow image as argument
-        :return: return the image as array of shape (1, 96, 96, 3)
-
-        Resize the image into dimensions 96 x 96
-        Convert the image into array with keras image processing
-        Reshape the array to shape (1, 96, 96, 3)
-        """
-        img = observed_frame.resize((96, 96))
-        arr = img_to_array(img)
-        arr = arr.reshape((1,) + arr.shape)
-        return arr
