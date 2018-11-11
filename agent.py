@@ -54,12 +54,12 @@ class Agent(ABC):
     def step(self, observed_frame):
         """
         :param observed_frame: pass the observed_frame
-        :return: (preprocessed_observed_frame, action_took, reward_got)
+        :return: (stimulus, q_values, action_took, reward_got)
         """
-        preprocessed_frame, action = self.act(observed_frame)
+        stimulus, q_values, action = self.act(observed_frame)
         self.move_to_direction(actions[action])
         reward = self.environment.get_reward_for_agent(self)
-        return preprocessed_frame, action, reward
+        return stimulus, q_values, action, reward
 
     def gogogo(self):
         """
@@ -164,9 +164,10 @@ class Agent(ABC):
         pass
 
     @abstractmethod
-    def learn(self, observed_frame, action, reward):
+    def learn(self, stimulus, q_values, action, reward):
         """
-        :param observed_frame: Frame observed
+        :param stimulus: Frame observed
+        :param q_values: predicted Q Values
         :param action: Action taken
         :param reward: Reward got for the step.
         :return: Error rate.

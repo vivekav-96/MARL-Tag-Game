@@ -18,8 +18,10 @@ class AbstractRLAgent(Agent, ABC):
         self.network = None
         self.load_network()
 
-    def learn(self, observed_frame, action, reward):
-        print('Agent {0} got reward {1} for performing action {2}'.format(self.get_id(), reward, action))
+    def learn(self, stimulus, q_values, action, reward):
+        q_values[0][action] += reward
+        error = self.network.train_on_batch(stimulus, q_values)
+        print('Trained agent {} with error {}'.format(self.get_id(), error))
 
     def load_network(self, force_rebuild_network=False):
         """
@@ -45,9 +47,7 @@ class AbstractRLAgent(Agent, ABC):
                     print('Loaded {0}-{1} network from file'.format(self.get_agent_type().name, self.get_id()))
                 else:
                     self.network = self.__build_network()
-
-    def train_network(self):
-        pass
+        self.network.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
     def save_network(self):
         model_dir = self.get_model_dir()
@@ -74,5 +74,4 @@ class AbstractRLAgent(Agent, ABC):
         model.add(MaxPooling2D(pool_size=(3, 3)))
         model.add(Flatten())
         model.add(Dense(8))
-        model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
         return model

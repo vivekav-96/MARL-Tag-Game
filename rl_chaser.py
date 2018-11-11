@@ -9,6 +9,6 @@ class RLChaser(AbstractRLAgent, Chaser):
 
     def act(self, observed_frame):
         stimulus = preprocess_image(observed_frame)
-        prediction = self.network.predict(stimulus)
-        action = np.argmax(prediction)
-        return stimulus, action
+        q_values = self.network.predict(stimulus)
+        action = np.argmax(q_values)
+        return stimulus, q_values, action

@@ -28,14 +28,14 @@ if __name__ == '__main__':
     i = 0
     if not os.path.exists('frames'):
         os.mkdir('frames')
-    while i < 5:
+    while i < 50:
         i += 1
         env.render()
         observed_frame = env.observe()
         observed_frame.save('frames/observed_frame_{0}.png'.format(i))
         for agent in agents:
-            stimulus, action, reward = agent.step(observed_frame)
-            agent.learn(stimulus, action, reward)
+            stimulus, q_values, action, reward = agent.step(observed_frame)
+            agent.learn(stimulus, q_values, action, reward)
 
         print('Done episode #{0}'.format(i))
 
