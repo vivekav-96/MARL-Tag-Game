@@ -1,3 +1,4 @@
+import os
 from abc import ABC
 
 from keras import Sequential
@@ -5,16 +6,18 @@ from keras.layers import Conv2D
 from keras.layers.convolutional import MaxPooling2D
 from keras.layers.core import Dense, Flatten
 from keras.preprocessing.image import img_to_array
+from keras.models import model_from_json
 
 from agent import Agent
 
 
 class AbstractRLAgent(Agent, ABC):
+    network: Sequential
 
     def __init__(self, id, environment, parent, init_x, init_y):
         super().__init__(id, environment, parent, init_x, init_y)
         self.network = None
-        self.load_network(force_rebuild_network=True)
+        self.load_network()
 
     def learn(self, observed_frame, action, reward):
         print('Agent {0} got reward {1} for performing action {2}'.format(self.get_id(), reward, action))
@@ -30,15 +33,37 @@ class AbstractRLAgent(Agent, ABC):
         else:
             if self.network is None:
                 # load network from file if present else build and load network
-                self.network = self.__build_network()
+                model_json = self.get_model_dir() + 'model.json'
+                model_weights = self.get_model_dir() + 'model.h5'
+
+                if os.path.exists(model_json) and os.path.exists(model_weights):
+                    # load json and create model
+                    with open(model_json, 'r') as json_file:
+                        loaded_model_json = json_file.read()
+                    self.network = model_from_json(loaded_model_json)
+                    # load weights into new model
+                    self.network.load_weights(model_weights)
+                    print('Loaded {0}-{1} network from file'.format(self.get_agent_type().name, self.get_id()))
+                else:
+                    self.network = self.__build_network()
 
     def train_network(self):
         pass
 
     def save_network(self):
-        pass
+        model_dir = self.get_model_dir()
+        if not os.path.exists(model_dir):
+            os.makedirs(model_dir)
+        nw_json = self.network.to_json()
+        with open(model_dir + 'model.json', 'w') as json_file:
+            json_file.write(nw_json)
+        self.network.save_weights(model_dir + 'model.h5')
 
-    def __build_network(self):
+    def get_model_dir(self):
+        return 'models/{0}/{1}/'.format(self.get_agent_type().name, self.get_id())
+
+    @staticmethod
+    def __build_network():
         """
         :return: RLAgent's network
 
@@ -51,9 +76,6 @@ class AbstractRLAgent(Agent, ABC):
         model.add(Flatten())
         model.add(Dense(8))
         model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-
-        self.save_network()
-
         return model
 
     @staticmethod

@@ -117,25 +117,6 @@ class Agent(ABC):
         """
         return self.parent.coords(self.card)
 
-    def get_angle_to_target(self, target_x, target_y):
-        """
-        :param target_x: Target X co-ordinate
-        :param target_y: Target Y co-ordinate
-        :return: Euclidean angle to th target.
-
-        Divide by Zero error cases are avoided.
-        """
-        coords = self.get_self_coords()
-        if target_x == coords[0] and target_y > coords[1]:
-            print('case 1 : {}'.format(-90))
-            return -90
-        elif target_x == coords[0] and target_y <= coords[1]:
-            print('case 2 : {}'.format(90))
-            return 90
-        else:
-            theta = math.degrees(math.atan((coords[1] - target_y) / (coords[0] - target_x)))
-            return theta
-
     def is_collided(self, agent):
         """
         :param agent: Target agent
@@ -187,3 +168,22 @@ class Agent(ABC):
         Update the Agent's knowledge based on the reward got.
         """
         pass
+
+    # def get_angle_to_target(self, target_x, target_y):
+    #     """
+    #     :param target_x: Target X co-ordinate
+    #     :param target_y: Target Y co-ordinate
+    #     :return: Euclidean angle to th target.
+    #
+    #     Divide by Zero error cases are avoided.
+    #     """
+    #     coords = self.get_self_coords()
+    #     if target_x == coords[0] and target_y > coords[1]:
+    #         print('case 1 : {}'.format(-90))
+    #         return -90
+    #     elif target_x == coords[0] and target_y <= coords[1]:
+    #         print('case 2 : {}'.format(90))
+    #         return 90
+    #     else:
+    #         theta = math.degrees(math.atan((coords[1] - target_y) / (coords[0] - target_x)))
+    #         return theta
