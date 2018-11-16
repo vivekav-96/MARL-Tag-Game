@@ -78,6 +78,7 @@ class TagEnv(gym.Env):
             for c in self.chasers:
                 if agent.is_collided(c):
                     # Runner has bee captured
+                    print('{0} {1} got captured'.format(agent.get_agent_type(), agent.get_id()))
                     reward -= CAPTURE_REWARD
                 else:
                     temp_reward = distance_btw_points(agent.get_self_coords(), c.get_self_coords()) / 1060
@@ -87,6 +88,7 @@ class TagEnv(gym.Env):
             for r in self.runners:
                 if agent.is_collided(r):
                     # Runner has bee captured
+                    print('{0} {1} captured the runner'.format(agent.get_agent_type(), agent.get_id()))
                     reward += CAPTURE_REWARD
                 else:
                     temp_reward = distance_btw_points(agent.get_self_coords(), r.get_self_coords()) / 1060

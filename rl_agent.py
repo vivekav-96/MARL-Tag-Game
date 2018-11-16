@@ -4,7 +4,7 @@ from abc import ABC
 from keras import Sequential
 from keras.layers import Conv2D
 from keras.layers.convolutional import MaxPooling2D
-from keras.layers.core import Dense, Flatten
+from keras.layers.core import Dense, Flatten, Activation
 from keras.models import model_from_json
 from keras.optimizers import Adam
 
@@ -49,7 +49,7 @@ class AbstractRLAgent(Agent, ABC):
                     print('Loaded {0}-{1} network from file'.format(self.get_agent_type().name, self.get_id()))
                 else:
                     self.network = self.__build_network()
-        optimizer = Adam(epsilon=0.2)
+        optimizer = Adam(epsilon=0.3)
         self.network.compile(loss='mean_squared_error', optimizer=optimizer, metrics=['accuracy'])
 
     def save_network(self):
@@ -77,4 +77,5 @@ class AbstractRLAgent(Agent, ABC):
         model.add(MaxPooling2D(pool_size=(3, 3)))
         model.add(Flatten())
         model.add(Dense(8))
+        model.add(Activation('tanh'))
         return model

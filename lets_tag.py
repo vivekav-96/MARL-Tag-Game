@@ -17,11 +17,11 @@ if __name__ == '__main__':
     runners = []
 
     for i in range(NUMBER_OF_CHASERS):
-        c = RLChaser(i, env, env.get_canvas(), random.randint(250, 650), random.randint(250, 650))
+        c = RLChaser(i, env, env.get_canvas(), random.randint(400, 500), random.randint(400, 500))
         chasers.append(c)
 
     for i in range(NUMBER_OF_RUNNERS):
-        r = RLRunner(i + NUMBER_OF_CHASERS, env, env.get_canvas(), random.randint(250, 650), random.randint(250, 650))
+        r = RLRunner(i + NUMBER_OF_CHASERS, env, env.get_canvas(), random.randint(400, 500), random.randint(400, 500))
         runners.append(r)
 
     agents = runners + chasers
@@ -29,7 +29,7 @@ if __name__ == '__main__':
     i = 0
     if not os.path.exists('frames'):
         os.mkdir('frames')
-    while i < 500:
+    while i < 5000:
         i += 1
         env.render()
         observed_frame = env.observe()
