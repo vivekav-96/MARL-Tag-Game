@@ -6,6 +6,7 @@ from keras.layers import Conv2D
 from keras.layers.convolutional import MaxPooling2D
 from keras.layers.core import Dense, Flatten
 from keras.models import model_from_json
+from keras.optimizers import Adam
 
 from agent import Agent
 
@@ -21,7 +22,8 @@ class AbstractRLAgent(Agent, ABC):
     def learn(self, stimulus, q_values, action, reward):
         q_values[0][action] += reward
         error = self.network.train_on_batch(stimulus, q_values)
-        print('Trained agent {} with error {}'.format(self.get_id(), error))
+        print('Agent {} got reward {} for taking action {}. Trained agent with error {}'.format(self.get_id(), reward,
+                                                                                                action, error))
 
     def load_network(self, force_rebuild_network=False):
         """
@@ -47,7 +49,8 @@ class AbstractRLAgent(Agent, ABC):
                     print('Loaded {0}-{1} network from file'.format(self.get_agent_type().name, self.get_id()))
                 else:
                     self.network = self.__build_network()
-        self.network.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+        optimizer = Adam(epsilon=0.2)
+        self.network.compile(loss='mean_squared_error', optimizer=optimizer, metrics=['accuracy'])
 
     def save_network(self):
         model_dir = self.get_model_dir()

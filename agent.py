@@ -1,10 +1,10 @@
-import math
 import random
 import threading
 import time
 import tkinter as tk
 from abc import ABC, abstractmethod
 from enum import Enum
+
 from utils import distance_btw_points
 
 
@@ -50,6 +50,11 @@ class Agent(ABC):
         self.img = tk.PhotoImage(file=self.get_icon())
         self.card = parent.create_image(init_x, init_y, image=self.img)
         self.parent = parent
+
+    def step_random(self):
+        r = random.randint(0, 7)
+        action = actions[r]
+        self.move_to_direction(action)
 
     def step(self, observed_frame):
         """
