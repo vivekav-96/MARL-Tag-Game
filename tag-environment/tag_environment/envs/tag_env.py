@@ -26,6 +26,7 @@ class TagEnv(gym.Env):
         self.canvas = tk.Canvas(self.root, bg="black", highlightthickness=0)
         self.canvas.pack(fill="both", expand=True)
         self.box = None
+        self.window = None
         self.update_ui()
         self.runners = []
         self.chasers = []
