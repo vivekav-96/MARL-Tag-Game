@@ -65,7 +65,7 @@ class TagEnv(gym.Env):
         """
         :return: Current frame as Pillow image
         """
-        im = ImageGrab.grab(bbox=self.box, backend='scrot')
+        im = ImageGrab.grab(bbox=self.box)
         return im
 
     def xlib_observe(self):
