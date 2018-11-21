@@ -1,10 +1,19 @@
-from Xlib.display import Display
+from PIL import Image
+from Xlib.display import Display, X
 
 
 def printWindowHierrarchy(window, indent):
     children = window.query_tree().children
     for w in children:
-        print(indent, window.get_wm_class())
+        # print(indent, window.get_wm_class())
+        try:
+            raw = w.get_image(0, 0, 500, 500, X.ZPixmap, 0xffffffff)
+            image = Image.frombytes("RGB", (500, 500), raw.data, "raw", "BGRX")
+            image.show()
+            return
+        except Exception as e:
+            pass
+            # print(e)
         printWindowHierrarchy(w, indent + '-')
 
 
