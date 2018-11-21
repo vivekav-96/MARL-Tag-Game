@@ -1,20 +1,36 @@
-from utils import distance_btw_points
+from Xlib.display import Display
 
-if __name__ == '__main__':
-    print(distance_btw_points((0, 0), (750, 750)))
-    # img = Image.open("2_0.png")
-    # img = img.resize((96, 96))
-    # arr = img_to_array(img)
-    # img.save("2_0-resized.png")
-    # print(arr.shape)
-    #
-    # model = Sequential()
-    # model.add(Conv2D(32, (3, 3), padding="same", input_shape=(96, 96, 3)))
-    # model.add(MaxPooling2D(pool_size=(3, 3)))
-    # model.add(Flatten())
-    # model.add(Dense(8))
-    # model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-    # model.summary()
-    #
-    # arr = arr.reshape((1,) + arr.shape)
-    # print(model.predict(arr))
+
+def printWindowHierrarchy(window, indent):
+    children = window.query_tree().children
+    for w in children:
+        print(indent, window.get_wm_class())
+        printWindowHierrarchy(w, indent + '-')
+
+
+display = Display()
+root = display.screen().root
+printWindowHierrarchy(root, '-')
+
+# from PIL import Image
+# from Xlib.display import Display, X
+#
+#
+# def find_window_hierarchy(window):
+#     children = window.query_tree().children
+#     for w in children:
+#         try:
+#             raw = w.get_image(0, 0, 500, 500, X.ZPixmap, 0xffffffff)
+#             image = Image.frombytes("RGB", (500, 500), raw.data, "raw", "BGRX")
+#             image.save()
+#             print('saved ', window.window.get_wm_name())
+#             return
+#         except:
+#             print('Exception')
+#         find_window_hierarchy(w)
+#
+#
+# if __name__ == '__main__':
+#     display = Display()
+#     root = display.screen().root
+#     find_window_hierarchy(root)
