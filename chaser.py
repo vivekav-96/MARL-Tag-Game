@@ -6,7 +6,7 @@ from agent import Agent, Type
 class Chaser(Agent, ABC):
 
     def unit_distance(self):
-        return 3
+        return 5
 
     def get_icon(self):
         return 'icons/blue.png'

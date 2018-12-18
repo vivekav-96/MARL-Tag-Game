@@ -1,14 +1,18 @@
 import os
 import random
+import time
 
 import gym
 
 from rl_chaser import RLChaser
 from rl_runner import RLRunner
 from tag_environment.envs import TagEnv
+from tkinter.messagebox import showinfo
 
 NUMBER_OF_RUNNERS = 1
 NUMBER_OF_CHASERS = 1
+
+debug_mode = False
 
 if __name__ == '__main__':
     env: TagEnv = gym.make('tag-v0')
@@ -29,7 +33,7 @@ if __name__ == '__main__':
     i = 0
     if not os.path.exists('frames'):
         os.mkdir('frames')
-    while i < 5000:
+    while not env.is_game_end():
         i += 1
         env.render()
         observed_frame = env.observe()
@@ -38,7 +42,9 @@ if __name__ == '__main__':
             stimulus, q_values, action, reward = agent.step(observed_frame)
             agent.learn(stimulus, q_values, action, reward)
 
-        print('Done episode #{0}'.format(i))
-
+        print('Done episode #{0}\n--------------------------------------------------------------------------'.format(i))
+        if debug_mode:
+            time.sleep(0.5)
+    showinfo("ok", "Runner has been captured")
     for a in agents:
         a.save_network()

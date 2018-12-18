@@ -135,7 +135,7 @@ class Agent(ABC):
 
         Returns true if the agent has been collided  with the target agent.
         """
-        return distance_btw_points(self.get_self_coords(), agent.get_self_coords()) <= 15
+        return distance_btw_points(self.get_self_coords(), agent.get_self_coords()) <= 17
 
     def get_id(self):
         return self.id

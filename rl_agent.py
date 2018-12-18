@@ -7,12 +7,16 @@ from keras.layers.convolutional import MaxPooling2D
 from keras.layers.core import Dense, Flatten, Activation
 from keras.models import model_from_json
 from keras.optimizers import Adam
+from utils import preprocess_image
+
+import random
 
 from agent import Agent
 
 
 class AbstractRLAgent(Agent, ABC):
     network: Sequential
+    EPSILON = 25
 
     def __init__(self, id, environment, parent, init_x, init_y):
         super().__init__(id, environment, parent, init_x, init_y)
@@ -22,8 +26,9 @@ class AbstractRLAgent(Agent, ABC):
     def learn(self, stimulus, q_values, action, reward):
         q_values[0][action] += reward
         error = self.network.train_on_batch(stimulus, q_values)
-        print('Agent {} got reward {} for taking action {}. Trained agent with error {}'.format(self.get_id(), reward,
-                                                                                                action, error))
+        print('{} {} got reward {} for taking action {}. Trained agent with error {}'.format(self.get_agent_type().name,
+                                                                                             self.get_id(), reward,
+                                                                                             action, error))
 
     def load_network(self, force_rebuild_network=False):
         """
@@ -50,7 +55,7 @@ class AbstractRLAgent(Agent, ABC):
                 else:
                     self.network = self.__build_network()
         optimizer = Adam(epsilon=0.3)
-        self.network.compile(loss='mean_squared_error', optimizer=optimizer, metrics=['accuracy'])
+        self.network.compile(loss='mean_squared_error', optimizer='sgd', metrics=['accuracy'])
 
     def save_network(self):
         model_dir = self.get_model_dir()
@@ -63,6 +68,22 @@ class AbstractRLAgent(Agent, ABC):
 
     def get_model_dir(self):
         return 'models/{0}/{1}/'.format(self.get_agent_type().name, self.get_id())
+
+    def act(self, observed_frame):
+        """
+        Produces a random number between 0 and 100, and
+        if the random number is less than EPSILON value, takes a random action
+        else predict an action and take it
+        """
+        stimulus = preprocess_image(observed_frame)
+        q_values = self.network.predict(stimulus)
+        r = random.randint(0, 100)
+        if r < AbstractRLAgent.EPSILON:
+            print(self.get_agent_type().name, " taking random action")
+            action = random.randint(0, 7)
+        else:
+            action = np.argmax(q_values)
+        return stimulus, q_values, action
 
     @staticmethod
     def __build_network():

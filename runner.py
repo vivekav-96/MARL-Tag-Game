@@ -11,7 +11,7 @@ class Runner(Agent, ABC):
         return 'icons/red.png'
 
     def unit_distance(self):
-        return 4
+        return 5
 
     def get_agent_type(self):
         return Type.RUNNER

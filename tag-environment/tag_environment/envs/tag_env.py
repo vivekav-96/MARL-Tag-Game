@@ -25,6 +25,7 @@ class TagEnv(gym.Env):
         self.canvas = tk.Canvas(self.root, bg="black", highlightthickness=0)
         self.canvas.pack(fill="both", expand=True)
         self.box = None
+        self.game_end = False
         self.update_ui()
         self.runners = []
         self.chasers = []
@@ -80,6 +81,7 @@ class TagEnv(gym.Env):
                     # Runner has bee captured
                     print('{0} {1} got captured'.format(agent.get_agent_type(), agent.get_id()))
                     reward -= CAPTURE_REWARD
+                    self.game_end = True
                 else:
                     temp_reward = distance_btw_points(agent.get_self_coords(), c.get_self_coords()) / 1060
                     reward += temp_reward
@@ -90,6 +92,7 @@ class TagEnv(gym.Env):
                     # Runner has bee captured
                     print('{0} {1} captured the runner'.format(agent.get_agent_type(), agent.get_id()))
                     reward += CAPTURE_REWARD
+                    self.game_end = True
                 else:
                     temp_reward = distance_btw_points(agent.get_self_coords(), r.get_self_coords()) / 1060
                     reward -= temp_reward
@@ -105,6 +108,9 @@ class TagEnv(gym.Env):
     def spawn_agents(self, runners, chasers):
         self.runners = runners
         self.chasers = chasers
+
+    def is_game_end(self):
+        return self.game_end
 
     def find_window_hierarchy(self, window, window_name):
         # window: Xlib.display.drawable.Window
