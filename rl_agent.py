@@ -8,7 +8,7 @@ from keras.layers.core import Dense, Flatten, Activation
 from keras.models import model_from_json
 from keras.optimizers import Adam
 from utils import preprocess_image
-
+import numpy as np
 import random
 
 from agent import Agent
