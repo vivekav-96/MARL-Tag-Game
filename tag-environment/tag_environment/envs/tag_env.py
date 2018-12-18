@@ -2,6 +2,7 @@ import tkinter as tk
 
 import Xlib
 import gym
+import platform
 import pyscreenshot as ImageGrab
 from PIL import Image
 from Xlib.display import Display, X
@@ -25,13 +26,17 @@ class TagEnv(gym.Env):
         self.canvas = tk.Canvas(self.root, bg="black", highlightthickness=0)
         self.canvas.pack(fill="both", expand=True)
         self.box = None
+        self.window = None
         self.game_end = False
         self.update_ui()
         self.runners = []
         self.chasers = []
         display = Display()
         root = display.screen().root
-        self.find_window_hierarchy(root, ENV_NAME)
+
+        # If current platform is linux, initialize Xlib to find game window hierarchy to observe frames.
+        if 'Linux' in platform.system():
+            self.find_window_hierarchy(root, ENV_NAME)
 
         self.box = (self.canvas.winfo_rootx(), self.canvas.winfo_rooty(),
                     self.canvas.winfo_width(), self.canvas.winfo_height())
@@ -48,14 +53,20 @@ class TagEnv(gym.Env):
     def observe(self):
         """
         :return: Current frame as Pillow image
+
+        If the working platform is linux, we'll use Xlib to capture the window frame (which is almost 10 times faster)
+        else we'll use the basic screenshoting method.
         """
-        return self.xlib_observe()
+        if 'Linux' in platform.system():
+            return self.xlib_observe()
+        else:
+            return self.pyscreenshot_observe()
 
     def pyscreenshot_observe(self):
         """
         :return: Current frame as Pillow image
         """
-        im = ImageGrab.grab(bbox=self.box, backend='scrot')
+        im = ImageGrab.grab(bbox=self.box)
         return im
 
     def xlib_observe(self):
@@ -122,6 +133,7 @@ class TagEnv(gym.Env):
                 try:
                     raw = w.get_image(0, 0, ENV_WIDTH, ENV_HEIGHT, X.ZPixmap, 0xffffffff)
                     self.window = w
+                    return
                 except:
                     pass
             self.find_window_hierarchy(w, window_name)
